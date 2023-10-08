@@ -63,6 +63,8 @@ type AreaExtra = Area3D<Schemes> | AngularArea2D<Schemes>;
 
 const socket = new Classic.Socket('socket');
 
+export const editorData = new NodeEditor<Schemes>();
+
 export async function createEditor(container: HTMLElement, injector: Injector) {
   const editor = new NodeEditor<Schemes>();
   const area = new Area3DPlugin<Schemes, AreaExtra>(container);
@@ -94,6 +96,8 @@ export async function createEditor(container: HTMLElement, injector: Injector) {
 
   await editor.addConnection(new Connection(a, 'value', add, 'a'));
   await editor.addConnection(new Connection(b, 'value', add, 'b'));
+
+  console.log(editor.getNodes());
 
   await area.translate(a.id, { x: 12, y: 35 });
   await area.translate(b.id, { x: 12, y: 172 });

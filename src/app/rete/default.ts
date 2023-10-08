@@ -1,4 +1,4 @@
-import { ClassicPreset as Classic, GetSchemes, NodeEditor } from 'rete';
+import { ClassicPreset as Classic, ClassicPreset, GetSchemes, NodeEditor } from 'rete';
 import { Injector } from '@angular/core';
 import { Area2D, AreaPlugin } from 'rete-area-plugin';
 import {
@@ -12,12 +12,16 @@ import {
   Presets as AngularPresets,
 } from 'rete-angular-plugin/16';
 
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
 type Node = NumberNode | AddNode;
 type Conn =
   | Connection<NumberNode, AddNode>
   | Connection<AddNode, AddNode>
   | Connection<AddNode, NumberNode>;
-type Schemes = GetSchemes<Node, Conn>;
+// type Schemes = GetSchemes<Node, Conn>;
+type Schemes = GetSchemes<ClassicPreset.Node, ClassicPreset.Connection<ClassicPreset.Node, ClassicPreset.Node>>;
 
 class Connection<A extends Node, B extends Node> extends Classic.Connection<
   A,
@@ -71,8 +75,8 @@ export async function createEditor(container: HTMLElement, injector: Injector) {
 
   angularRender.addPreset(AngularPresets.classic.setup());
 
-  const a = new NumberNode(1);
-  const b = new NumberNode(1);
+  const a = new NumberNode(10);
+  const b = new NumberNode(10);
   const add = new AddNode();
 
   await editor.addNode(a);
@@ -85,6 +89,13 @@ export async function createEditor(container: HTMLElement, injector: Injector) {
   await area.nodeViews.get(a.id)?.translate(100, 100);
   await area.nodeViews.get(b.id)?.translate(100, 300);
   await area.nodeViews.get(add.id)?.translate(400, 150);
+
+  console.log(editor.getNodes());
+  // const connectionCreated$ = new Observable((observer) => {
+  //   editor.on('connectioncreated', (connection) => {
+  //     observer.next(connection);
+  //   });
+  // });
 
   return {
     destroy: () => area.destroy(),

@@ -8,11 +8,12 @@ import { createEditor } from './rete'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('rete') container!: ElementRef<HTMLElement>
+  @ViewChild('reteEditor') container!: ElementRef<HTMLElement>
 
   constructor(private injector: Injector) { }
 
   async ngAfterViewInit() {
-    await createEditor(this.container.nativeElement, this.injector)
+    await createEditor(this.container.nativeElement, this.injector);
+
   }
 }
